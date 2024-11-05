@@ -12,48 +12,81 @@ class LandingPageController extends Controller
 {
     public function index()
     {
-        $panen = panen::all();
         $provinsi = Provinsi::all();
-        $produksi = [];
-        if (!$panen->isEmpty()) {
-            for ($i = 0; $i < 13; $i++) {
-                $produksi[] = panen::whereMonth('created_at', $i + 1)->sum('produksi');
-            }
-            // join panen with user where id_petani = id and join with provinsi where id_provinsi = id
-            $panen = panen::join('users', 'panens.id_petani', '=', 'users.id')
-                ->join('provinsis', 'panens.id_provinsi', '=', 'provinsis.id')
-                ->select('panens.*', 'users.name', 'provinsis.nama_provinsi')
-                ->get();
+
+        // Path ke file JSON di dalam folder public/data
+        $bps = public_path('data/bps.json');
+
+        // Cek apakah file JSON ada
+        if (file_exists($bps)) {
+            // Ambil isi file JSON
+            $data = file_get_contents($bps);
+
+            // Decode JSON ke dalam bentuk array
+            $data = json_decode($data, true);
+
+            // Sekarang $data adalah array PHP yang berisi data dari bps.json
+            $dataBps = $data['datas'];
+        } else {
+            $dataBps = [];
         }
 
+        return view('welcome', compact('provinsi', 'dataBps'));
+    }
 
-        $panenTahun = panen::whereYear('updated_at', date('Y'))->get();
+    public function dataPanen()
+    {
+        $provinsi = Provinsi::all();
+
+        $bps = public_path('data/bps.json');
+
+        // Cek apakah file JSON ada
+        if (file_exists($bps)) {
+            // Ambil isi file JSON
+            $data = file_get_contents($bps);
+
+            // Decode JSON ke dalam bentuk array
+            $data = json_decode($data, true);
+
+            // Sekarang $data adalah array PHP yang berisi data dari bps.json
+            $dataBps = $data['datas'];
+
+            // sort data berdasarkan tahun
+            usort($dataBps, function ($a, $b) {
+                return $a['tahun'] <=> $b['tahun'];
+            });
+        } else {
+            $dataBps = [];
+        }
+        return view('data_panen', compact('provinsi', 'dataBps'));
+    }
+
+    public function bpsMaps()
+    {
 
         $provinsis = Provinsi::all();
 
-        $allLuasPanen = 0;
-        $allProduktivitas = 0;
-        $allProduksi = 0;
-        foreach ($provinsis as $province) {
-            $luasPanenVal = 0;
-            $produktivitasVal = 0;
-            $produksiVal = 0;
+        // Path ke file JSON di dalam folder public/data
+        $bps = public_path('data/bps.json');
 
-            foreach ($panenTahun as $panenT) {
-                if ($panenT->id_provinsi == $province->id) {
-                    $luasPanenVal += $panenT->luas_panen;
-                    $produktivitasVal += $panenT->produktivitas;
-                    $produksiVal += $panenT->produksi;
-                    $allLuasPanen += $panenT->luas_panen;
-                    $allProduktivitas += $panenT->produktivitas;
-                    $allProduksi += $panenT->produksi;
-                }
-            }
-            $books[] = [$province->nama_provinsi, $luasPanenVal, $produktivitasVal, $produksiVal, date('Y')];
+        // Cek apakah file JSON ada
+        if (file_exists($bps)) {
+            // Ambil isi file JSON
+            $data = file_get_contents($bps);
+
+            // Decode JSON ke dalam bentuk array
+            $data = json_decode($data, true);
+
+            // Sekarang $data adalah array PHP yang berisi data dari bps.json
+            $dataBps = $data['datas'];
+        } else {
+            $dataBps = [];
         }
 
+        // get year constraint from $dataBps
+        $years = array_unique(array_column($dataBps, 'tahun'));
 
-        return view('welcome', compact('panen', 'produksi', 'provinsi', 'books'));
+        return view('bps_maps', compact('dataBps', 'years', 'provinsis'));
     }
 
     public function sendAduan(Request $request)
@@ -83,6 +116,5 @@ class LandingPageController extends Controller
         Aduan::create($aduan);
 
         return redirect('/')->with('success', 'Pesan berhasil dikirim');
-
     }
 }

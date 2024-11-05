@@ -13,12 +13,16 @@ use App\Http\Controllers\ReportController;
 Route::get('/logout', [AuthentificationController::class, 'logout'])->name('logout');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/', [LandingPageController::class, 'index']);
+    Route::get('/', [LandingPageController::class, 'index'])->name('landing-page');
+    Route::get('/dataPanen', [LandingPageController::class, 'dataPanen'])->name('data-panen');
+    Route::get('/bpsMaps', [LandingPageController::class, 'bpsMaps'])->name('bps-maps');
+
     Route::post('/sendAduan', [LandingPageController::class, 'sendAduan'])->name('sendAduan');
     Route::get('/login', [AuthentificationController::class, 'login'])->name('login');
     Route::get('/register', [AuthentificationController::class, 'register'])->name('register');
     Route::post('/authLogin', [AuthentificationController::class, 'authLogin'])->name('authLogin');
     Route::post('/authRegis', [AuthentificationController::class, 'authRegis'])->name('authRegis');
+
 });
 
 Route::middleware('auth')->group(function () {

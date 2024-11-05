@@ -32,6 +32,8 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.min.css') }}">
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
     <!-- Custom CSS -->
     <style>
         body {
@@ -164,6 +166,18 @@
             text-align: right !important;
             float: right !important;
         }
+
+        .select2-container .select2-selection--single {
+            height: calc(2.25rem + 2px);
+            /* Tinggi default .form-control Bootstrap */
+            padding: 0.175rem 0.25rem;
+            /* Padding default dari .form-control */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: calc(2.25rem);
+            /* Sejajarkan teks di tengah */
+        }
     </style>
 </head>
 
@@ -181,16 +195,15 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link fw-bold @if (request()->is('/')) activeCustome @endif"
-                            href="#home">HOME</a>
+                            href="{{ route('landing-page') }}">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" href="#data_panen">DATA PANEN</a>
+                        <a class="nav-link fw-bold @if (request()->is('data-panen')) activeCustome @endif"
+                            href="{{ route('data-panen') }}">DATA PANEN</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link fw-bold" href="#peta">PETA LOKASI PANEN</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold" href="#contact">CONTACT</a>
+                        <a class="nav-link fw-bold @if (request()->is('bpsMaps')) activeCustome @endif"
+                            href="{{ route('bps-maps') }}">PETA LOKASI PANEN</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -213,7 +226,8 @@
                     <div class="decoration"></div>
                     <div class="card p-4" id="special_card" style="text-align: left;">
                         <h1 style="color: #5956e9;">SISTEM INFORMASI GEOGRAFIS</h1>
-                        <p style="text-align: justify;">Selamat datang di Sistem Informasi Geografis (SIG) Dinas Ketahanan Pangan dan Pertanian. SIG ini
+                        <p style="text-align: justify;">Selamat datang di Sistem Informasi Geografis (SIG) Dinas
+                            Ketahanan Pangan dan Pertanian. SIG ini
                             menyediakan informasi mengenai data panen di Indonesia. Anda dapat melihat data panen
                             berdasarkan provinsi, tahun, dan lainnya. Selamat menikmati!</p>
                     </div>
@@ -248,75 +262,48 @@
     <!-- Chart Section -->
     <section class="chart-section bg-light" id="data_panen">
         <div class="container">
-            <h3 class="text-center">Produksi Panen</h3>
-
-
-            <div class="row">
-                <div class="col-md-12">
-                    <canvas id="myChart" height="100"></canvas>
+            <div class="row mb-2 align-items-center">
+                <div class="col-auto">
+                    <label for="provinsi" class="col-form-label">Provinsi</label>
+                </div>
+                <div class="col-3">
+                    <select name="provinsi" id="provinsi" class="form-control">
+                        @foreach ($provinsi as $p)
+                            <option value="{{ $p->nama_provinsi }}">{{ $p->nama_provinsi }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Data Section -->
-    <section class="data-section">
-        <div class="container">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col-2">
-                            <h3>Data Panen</h3>
-                        </div>
-                        <div class="col-3">
-                            <select name="provinsi" id="provinsi" class="form-control">
-                                <option value="semua_provinsi">Semua Provinsi</option>
-                                @foreach ($provinsi as $p)
-                                    <option value="{{ $p->nama_provinsi }}">{{ $p->nama_provinsi }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-4"></div>
-                    </div>
-
-                </div>
-                <div class="card-body">
-                    <table id="dataTable" class="table table-striped table-bordered" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>Provinsi</th>
-                                <th>Luas Panen (Ha)</th>
-                                <th>Produksi (TON)</th>
-                                <th>Produktivitas (Ku/Ha)</th>
-                                <th>Tahun</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataBody">
-                            @foreach ($books as $p)
-                                <tr>
-                                    <td>{{ $p[0] }}</td>
-                                    <td>{{ $p[1] }}</td>
-                                    <td>{{ $p[2] }}</td>
-                                    <td>{{ $p[3] }}</td>
-                                    <td>{{ $p[4] }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Peta Lokasi Panen -->
-    <section id="peta">
-        <div class="container">
-            <h3 class="text-center">Peta Lokasi Panen</h3>
+            {{-- filter tahun --}}
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-4">
                     <div class="card">
-                        <div id = "map" style = "width: 100%; height: 800px"></div>
+                        <div class="card-header">
+                            <h3>Luas Panen</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="luasPanenChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Produksi Panen</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="produksiPanenChart" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Produktifitas Panen</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="produktifitasPanenChart" width="400" height="400"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -341,7 +328,8 @@
                                         <h5 class="text-black">Address</h5>
                                     </div>
                                     <div class="row">
-                                        <p class="text-black">Kantor Pusat Kementerian Pertanian Gedung D Lantai 8 Jl. Harsono RM. No. 3 </p>
+                                        <p class="text-black">Kantor Pusat Kementerian Pertanian Gedung D Lantai 8 Jl.
+                                            Harsono RM. No. 3 </p>
                                     </div>
                                 </div>
                             </div>
@@ -481,6 +469,7 @@
     <script src="{{ asset('assets/plugins/dist/js/adminlte.js') }}"></script>
     <script src="{{ asset('assets/plugins/dist/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('assets/plugins/toastr/toastr.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @if (session('success'))
         <script>
             $(document).Toasts('create', {
@@ -520,6 +509,15 @@
         </script>
     @endif
 
+    <script>
+        $('#provinsi').select2({
+            placeholder: 'Pilih Provinsi',
+        });
+        $('#provinsi').on('change', function() {
+            getChart();
+        });
+    </script>
+
     <!-- Custom JS -->
     <script>
         $(document).ready(function() {
@@ -543,105 +541,93 @@
                     }]
                 }
             });
+            getChart();
         });
     </script>
     <script>
-        // Chart.js Example
-        const produksi = @json($produksi);
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Januari', 'Febuari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
-                    'Oktober', 'November', 'Desember'
-                ],
-                datasets: [{
-                    label: 'Produksi Panen (TON)',
-                    data: produksi,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        function getChart() {
+            const provinsi = $('#provinsi').val();
+
+            const dataBps = {!! json_encode($dataBps) !!};
+
+            const dataFiltered = dataBps.filter(d => d.provinsi === provinsi);
+            const data = dataFiltered.map(d => ({
+                ...d,
+                luas_panen: parseInt(d.luas_panen),
+                produksi: parseInt(d.produksi),
+                produktifitas: parseFloat(d.produktifitas.replace(',', '.'))
+            }));
+
+
+            const ctx = document.getElementById('luasPanenChart').getContext('2d');
+            const ctx2 = document.getElementById('produksiPanenChart').getContext('2d');
+            const ctx3 = document.getElementById('produktifitasPanenChart').getContext('2d');
+
+            const luasPanenChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: data.map(d => d.tahun),
+                    datasets: [{
+                        label: 'Luas Panen (Ha)',
+                        data: data.map(d => d.luas_panen),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-    </script>
-    <script>
-        const panen = @json($panen);
-        var map = L.map('map').setView([-6.200000, 106.816666], 12); // Pusatkan di Jakarta, Indonesia
-
-        // Tambahkan layer peta
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // Titik-titik koordinat yang sudah ditentukan
-        var locations = panen.map(function(panen, index) {
-            return {
-                name: 'Lokasi Panen  ' + panen.name + ' ' + panen.nama_provinsi + ' #' + index,
-                latitude: panen.latitude,
-                longitude: panen.longitude
-            };
-        });
-
-        // Tambahkan marker untuk setiap koordinat
-        locations.forEach(function(location) {
-            var lat = location.latitude;
-            var lng = location.longitude;
-            L.marker([lat, lng]).addTo(map)
-                .bindPopup(location.name + '<br>Latitude: ' + lat + '<br>Longitude: ' + lng);
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuItems = document.querySelectorAll('.nav-link');
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Menghapus kelas 'active' dari semua item
-                    menuItems.forEach(el => el.classList.remove('activeCustome'));
-
-                    // Menambahkan kelas 'activeCustome' ke item yang diklik
-                    this.classList.add('activeCustome');
-                });
-            });
-        });
-
-        const search = document.getElementById('search');
-        const provinsi = document.getElementById('provinsi');
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            // Initialize DataTable
-            var table = $("#dataTable").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
             });
 
+            const produksiPanenChart = new Chart(ctx2, {
+                type: "line",
+                data: {
+                    labels: data.map(d => d.tahun),
+                    datasets: [{
+                        label: 'Produksi (Ton)',
+                        data: data.map(d => d.produksi),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
-            // Custom filter for Provinsi
-            $('#provinsi').on('change', function() {
-                var selectedProvinsi = $(this).val();
-                if (selectedProvinsi === 'semua_provinsi') {
-                    table.column(0).search('').draw();
-                } else {
-                    if (selectedProvinsi) {
-                        table.column(0).search('^' + selectedProvinsi + '$', true, false).draw();
-                    } else {
-                        table.column(0).search('').draw();
+            const produktifitasPanenChart = new Chart(ctx3, {
+                type: "line",
+                data: {
+                    labels: data.map(d => d.tahun),
+                    datasets: [{
+                        label: 'Produktifitas (Ku/Ha)',
+                        data: data.map(d => d.produktifitas),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
             });
 
 
-        });
+        }
     </script>
 
 
