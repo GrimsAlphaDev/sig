@@ -19,7 +19,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthentificationController::class, 'register'])->name('register');
     Route::post('/authLogin', [AuthentificationController::class, 'authLogin'])->name('authLogin');
     Route::post('/authRegis', [AuthentificationController::class, 'authRegis'])->name('authRegis');
-
 });
 
 Route::middleware('auth')->group(function () {
@@ -67,5 +66,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/report', [ReportController::class, 'index'])->name('admin.report.index');
     Route::post('/admin/report/generate', [ReportController::class, 'generateLaporan'])->name('admin.report.generate');
     Route::delete('/admin/report/delete/{id}', [ReportController::class, 'delete'])->name('admin.report.delete');
-
 });
