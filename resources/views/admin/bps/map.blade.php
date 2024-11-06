@@ -191,45 +191,13 @@
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="#"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold @if (request()->is('/')) activeCustome @endif"
-                            href="{{ route('landing-page') }}">HOME</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold @if (request()->is('dataPanen')) activeCustome @endif"
-                            href="{{ route('data-panen') }}">DATA PANEN</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold @if (request()->is('bpsMaps')) activeCustome @endif"
-                            href="{{ route('bps-maps') }}">PETA</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link fw-bold" href="{{ route('register') }}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white" href="{{ route('login') }}">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Main Sidebar Container -->
+    @include('admin.layouts.sidebar')
 
 
     <!-- Filter Tahun dan Klasifikasi -->
     <div class="filter-container"
-        style="position: absolute; top: 80px; left: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);">
+        style="position: absolute; top: 10px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);">
         <label for="tahunSelect">Pilih Tahun</label>
         <select id="tahunSelect" class="form-control mb-2">
             <option value="2021">2021</option>
@@ -258,6 +226,7 @@
             <span>Produksi Panen Lebih dari 1.000.000 Ton</span>
         </div>
     </div>
+
 
     <!-- Display Full Map -->
     <div id="map" style="width: 100%; height: 100vh;"></div>
@@ -409,7 +378,8 @@
                 }
             });
 
-            fetch('data/geo.json') // Sesuaikan dengan path file Anda
+            const url = "{{ asset('data/geo.json') }}";
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     // Menambahkan poligon kecamatan ke peta

@@ -203,7 +203,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link fw-bold @if (request()->is('bpsMaps')) activeCustome @endif"
-                            href="{{ route('bps-maps') }}">PETA LOKASI PANEN</a>
+                            href="{{ route('bps-maps') }}">PETA</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">

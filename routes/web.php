@@ -44,6 +44,7 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::delete('/panen/delete/{id}', [UserDashboardController::class, 'delete'])->name('panen.delete');
 
     Route::get('/data-bps', [BPSController::class, 'index'])->name('data-bps.index');
+    Route::get('/data-bps/map', [BPSController::class, 'map'])->name('data-bps.map');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -76,4 +77,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/report/delete/{id}', [ReportController::class, 'delete'])->name('admin.report.delete');
 
     Route::get('/admin/data-bps', [BPSAdminController::class, 'index'])->name('admin.data-bps.index');
+    Route::get('/admin/data-bps/map', [BPSAdminController::class, 'map'])->name('admin.data-bps.map');
 });

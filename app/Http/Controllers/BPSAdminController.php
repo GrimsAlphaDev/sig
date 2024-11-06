@@ -39,4 +39,31 @@ class BPSAdminController extends Controller
 
         return view('admin.bps.index', compact('provinsis', 'dataBps', 'tahun'));
     }
+
+    public function map()
+    {
+        $provinsis = Provinsi::all();
+
+        // Path ke file JSON di dalam folder public/data
+        $bps = public_path('data/bps.json');
+
+        // Cek apakah file JSON ada
+        if (file_exists($bps)) {
+            // Ambil isi file JSON
+            $data = file_get_contents($bps);
+
+            // Decode JSON ke dalam bentuk array
+            $data = json_decode($data, true);
+
+            // Sekarang $data adalah array PHP yang berisi data dari bps.json
+            $dataBps = $data['datas'];
+        } else {
+            $dataBps = [];
+        }
+
+        // get year constraint from $dataBps
+        $years = array_unique(array_column($dataBps, 'tahun'));
+
+        return view('admin.bps.map', compact('dataBps', 'years', 'provinsis'));
+    }
 }

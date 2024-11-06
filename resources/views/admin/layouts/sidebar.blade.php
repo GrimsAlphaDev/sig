@@ -41,7 +41,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.report.index') }}" class="nav-link {{ request()->is('admin/report') ? 'active' : '' }}">
+                    <a href="{{ route('admin.report.index') }}"
+                        class="nav-link {{ request()->is('admin/report') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-file"></i>
                         <p>
                             Laporan Tahunan
@@ -49,13 +50,23 @@
                     </a>
                 </li class="nav-item">
                 <li class="nav-item">
-                    <a href="{{ route('admin.data-bps.index') }}" class="nav-link {{ request()->is('admin/data-bps') ? 'active' : '' }}">
+                    <a href="{{ route('admin.data-bps.index') }}"
+                        class="nav-link {{ request()->is('admin/data-bps') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-list"></i>
                         <p>
                             Data BPS
                         </p>
                     </a>
                 <li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.data-bps.map') }}"
+                        class="nav-link {{ request()->is('admin/data-bps/map') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-map"></i>
+                        <p>
+                            Peta
+                        </p>
+                    </a>
+                </li>
 
                 </li>
                 <li class="nav-item">
@@ -67,7 +78,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.chat.index') }}" class="nav-link {{ request()->is('admin/chat') ? 'active' : '' }}">
+                    <a href="{{ route('admin.chat.index') }}"
+                        class="nav-link {{ request()->is('admin/chat') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-comments"></i>
                         <p>
                             Chat

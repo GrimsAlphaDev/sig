@@ -48,6 +48,15 @@
                     </a>
                 <li>
                 <li class="nav-item">
+                    <a href="{{ route('data-bps.map') }}"
+                        class="nav-link {{ request()->is('data-bps/map') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-map"></i>
+                        <p>
+                            Peta
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('chat.index') }}" class="nav-link {{ request()->is('chat') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-comments"></i>
                         <p>
