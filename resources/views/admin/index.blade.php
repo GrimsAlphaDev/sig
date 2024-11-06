@@ -587,9 +587,9 @@
 
 
         function getColor(jumlahPanen) {
-            if (jumlahPanen > 20) return 'green'; // produksi lebih dari 20 ton
-            else if (jumlahPanen > 10) return 'yellow'; // produksi lebih dari 10 ton
-            else if (jumlahPanen > 0) return 'red' // produksi lebih dari 1 ton
+            if (jumlahPanen > 1000000) return 'green'; // produksi lebih dari 20 ton
+            else if (jumlahPanen > 500000 && jumlahPanen < 1000000) return 'yellow'; // produksi lebih dari 10 ton
+            else if (jumlahPanen < 500000) return 'red' // produksi lebih dari 1 ton
             // if there is no data, return no color
             else return 'none';
         }

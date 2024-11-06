@@ -240,21 +240,24 @@
     </div>
 
     <div class="klasifikasi-container"
-        style="position: absolute; top: 750px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);">
+        style="position: fixed; bottom: 10px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 8px; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); max-width: 250px;">
         <label for="klasifikasiSelect">Klasifikasi Berdasarkan Produksi Panen</label>
-        {{-- box with red color --}}
+
+        <!-- box with red color -->
         <div class="d-flex align-items-center mb-2">
-            <div style="width: 20px; height: 20px; background: red; margin-right: 10px;"></div>
+            <div style="width: 40px; height: 20px; background: red; margin-right: 10px;"></div>
             <span>Produksi Panen Kurang dari 500.000 Ton</span>
         </div>
-        {{-- box with yellow color --}}
+
+        <!-- box with yellow color -->
         <div class="d-flex align-items-center mb-2">
-            <div style="width: 20px; height: 20px; background: yellow; margin-right: 10px;"></div>
+            <div style="width: 40px; height: 20px; background: yellow; margin-right: 10px;"></div>
             <span>Produksi Panen Antara 500.000 - 1.000.000 Ton</span>
         </div>
-        {{-- box with green color --}}
+
+        <!-- box with green color -->
         <div class="d-flex align-items-center mb-2">
-            <div style="width: 20px; height: 20px; background: green; margin-right: 10px;"></div>
+            <div style="width: 40px; height: 20px; background: green; margin-right: 10px;"></div>
             <span>Produksi Panen Lebih dari 1.000.000 Ton</span>
         </div>
     </div>
