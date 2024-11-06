@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="#" class="brand-link text-center">   
+    <a href="#" class="brand-link text-center">
         <i class="fas fa-user" style="margin-right: 10px;"></i> <span class="brand-text font-weight-light">User Page</span>
     </a>
 
@@ -38,6 +38,15 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('data-bps.index') }}"
+                        class="nav-link {{ request()->is('data-bps') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>
+                            Data BPS
+                        </p>
+                    </a>
+                <li>
                 <li class="nav-item">
                     <a href="{{ route('chat.index') }}" class="nav-link {{ request()->is('chat') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-comments"></i>

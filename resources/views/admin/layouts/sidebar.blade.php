@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="#" class="brand-link">
         <img src="{{ asset('assets/plugins/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
             class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Admin</span>
@@ -47,6 +47,16 @@
                             Laporan Tahunan
                         </p>
                     </a>
+                </li class="nav-item">
+                <li class="nav-item">
+                    <a href="{{ route('admin.data-bps.index') }}" class="nav-link {{ request()->is('admin/data-bps') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-list"></i>
+                        <p>
+                            Data BPS
+                        </p>
+                    </a>
+                <li>
+
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('aduan') }}" class="nav-link {{ request()->is('aduan') ? 'active' : '' }}">

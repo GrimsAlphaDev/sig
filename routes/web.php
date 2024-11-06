@@ -7,6 +7,8 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AuthentificationController;
+use App\Http\Controllers\BPSAdminController;
+use App\Http\Controllers\BPSController;
 use App\Http\Controllers\ReportController;
 
 // group route with guest middleware
@@ -40,6 +42,8 @@ Route::middleware(['auth', 'user'])->group(function () {
     Route::get('/panen/edit/{id}', [UserDashboardController::class, 'edit'])->name('panen.edit');
     Route::put('/panen/update/{id}', [UserDashboardController::class, 'update'])->name('panen.update');
     Route::delete('/panen/delete/{id}', [UserDashboardController::class, 'delete'])->name('panen.delete');
+
+    Route::get('/data-bps', [BPSController::class, 'index'])->name('data-bps.index');
 });
 
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -70,4 +74,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/report', [ReportController::class, 'index'])->name('admin.report.index');
     Route::post('/admin/report/generate', [ReportController::class, 'generateLaporan'])->name('admin.report.generate');
     Route::delete('/admin/report/delete/{id}', [ReportController::class, 'delete'])->name('admin.report.delete');
+
+    Route::get('/admin/data-bps', [BPSAdminController::class, 'index'])->name('admin.data-bps.index');
 });
